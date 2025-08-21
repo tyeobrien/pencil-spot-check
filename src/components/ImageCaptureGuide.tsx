@@ -1,11 +1,13 @@
-import { Camera, CheckCircle } from "lucide-react";
+import { useState } from "react";
+import { Camera, CheckCircle, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNativeCamera } from "@/hooks/useNativeCamera";
 
 interface ImageCaptureGuideProps {
   currentStep: number;
   totalSteps: number;
-  onCapture: () => void;
+  onCapture: (imageUri?: string) => void;
   onNext: () => void;
   onSkip?: () => void;
 }
@@ -25,6 +27,36 @@ export const ImageCaptureGuide = ({
   onSkip 
 }: ImageCaptureGuideProps) => {
   const currentStepInfo = steps[currentStep];
+  const { takePicture, selectFromGallery } = useNativeCamera();
+  const [isCapturing, setIsCapturing] = useState(false);
+
+  const handleNativeCapture = async () => {
+    try {
+      setIsCapturing(true);
+      const imageUri = await takePicture();
+      onCapture(imageUri);
+    } catch (error) {
+      console.error('Camera error:', error);
+      // Fallback to regular capture
+      onCapture();
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  const handleGallerySelect = async () => {
+    try {
+      setIsCapturing(true);
+      const imageUri = await selectFromGallery();
+      onCapture(imageUri);
+    } catch (error) {
+      console.error('Gallery error:', error);
+      // Fallback to regular capture
+      onCapture();
+    } finally {
+      setIsCapturing(false);
+    }
+  };
   
   return (
     <div className="min-h-screen bg-gradient-camera flex flex-col">
@@ -74,37 +106,52 @@ export const ImageCaptureGuide = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
-          <Button 
-            variant="camera" 
-            size="lg" 
-            className="flex-1"
-            onClick={onCapture}
-          >
-            <Camera className="w-5 h-5 mr-2" />
-            Capture Image
-          </Button>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+            <Button 
+              variant="camera" 
+              size="lg" 
+              className="flex-1"
+              onClick={handleNativeCapture}
+              disabled={isCapturing}
+            >
+              <Camera className="w-5 h-5 mr-2" />
+              {isCapturing ? 'Capturing...' : 'Take Photo'}
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={handleGallerySelect}
+              disabled={isCapturing}
+              className="text-white border-white/30 hover:bg-white/10"
+            >
+              <ImageIcon className="w-5 h-5" />
+            </Button>
+          </div>
           
-          {currentStep < totalSteps - 1 ? (
-            <Button 
-              variant="ghost" 
-              size="lg"
-              onClick={onNext}
-              className="text-white hover:bg-white/10"
-            >
-              Next
-            </Button>
-          ) : (
-            <Button 
-              variant="default" 
-              size="lg"
-              onClick={onNext}
-              className="bg-primary hover:bg-primary/90"
-            >
-              <CheckCircle className="w-5 h-5 mr-2" />
-              Done
-            </Button>
-          )}
+          <div className="flex gap-3">
+            {currentStep < totalSteps - 1 ? (
+              <Button 
+                variant="ghost" 
+                size="lg"
+                onClick={onNext}
+                className="flex-1 text-white hover:bg-white/10"
+              >
+                Next
+              </Button>
+            ) : (
+              <Button 
+                variant="default" 
+                size="lg"
+                onClick={onNext}
+                className="flex-1 bg-primary hover:bg-primary/90"
+              >
+                <CheckCircle className="w-5 h-5 mr-2" />
+                Done
+              </Button>
+            )}
+          </div>
         </div>
         
         {onSkip && (

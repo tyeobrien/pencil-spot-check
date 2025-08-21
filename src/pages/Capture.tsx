@@ -5,15 +5,18 @@ import { toast } from "sonner";
 
 export const Capture = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [capturedImages, setCapturedImages] = useState<string[]>([]);
+  const [capturedImages, setCapturedImages] = useState<Array<{uri: string, step: number}>>([]);
   const navigate = useNavigate();
   
   const totalSteps = 4;
 
-  const handleCapture = () => {
-    // Simulate image capture
-    const newImage = `captured-image-${currentStep + 1}`;
-    setCapturedImages(prev => [...prev, newImage]);
+  const handleCapture = (imageUri?: string) => {
+    // Store both native camera URI and fallback
+    const capturedImage = {
+      uri: imageUri || `simulated-image-${currentStep + 1}`,
+      step: currentStep
+    };
+    setCapturedImages(prev => [...prev, capturedImage]);
     toast.success(`Image ${currentStep + 1} captured successfully!`);
     
     // Auto-advance to next step
