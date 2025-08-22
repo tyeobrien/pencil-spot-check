@@ -61,22 +61,22 @@ export const ImageCaptureGuide = ({
   return (
     <div className="min-h-screen bg-gradient-camera flex flex-col">
       {/* Header */}
-      <div className="p-4 text-center border-b border-white/10">
-        <h2 className="text-white text-xl font-semibold mb-2">
+      <div className="p-4 sm:p-6 text-center border-b border-white/10">
+        <h2 className="text-white text-lg sm:text-xl font-semibold mb-2">
           Step {currentStep + 1} of {totalSteps}
         </h2>
-        <h3 className="text-white/90 text-lg">{currentStepInfo.label}</h3>
-        <p className="text-white/70 text-sm mt-1">{currentStepInfo.description}</p>
+        <h3 className="text-white/90 text-base sm:text-lg">{currentStepInfo.label}</h3>
+        <p className="text-white/70 text-sm sm:text-base mt-1 px-2">{currentStepInfo.description}</p>
       </div>
 
       {/* Camera Viewfinder Area */}
       <div className="flex-1 relative flex items-center justify-center p-4">
         <div className="relative">
           {/* Pencil outline guide */}
-          <div className="w-80 h-60 border-2 border-dashed border-white/40 rounded-lg flex items-center justify-center">
+          <div className="w-72 h-52 sm:w-80 sm:h-60 border-2 border-dashed border-white/40 rounded-lg flex items-center justify-center mx-auto">
             <div className="text-center text-white/60">
-              <Camera className="w-12 h-12 mx-auto mb-2" />
-              <p className="text-sm">Align pencil within guide</p>
+              <Camera className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2" />
+              <p className="text-xs sm:text-sm px-2">Align pencil within guide</p>
             </div>
           </div>
           
@@ -111,11 +111,11 @@ export const ImageCaptureGuide = ({
             <Button 
               variant="camera" 
               size="lg" 
-              className="flex-1"
+              className="flex-1 touch-target text-sm sm:text-base"
               onClick={handleNativeCapture}
               disabled={isCapturing}
             >
-              <Camera className="w-5 h-5 mr-2" />
+              <Camera className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               {isCapturing ? 'Capturing...' : 'Take Photo'}
             </Button>
             
@@ -124,9 +124,9 @@ export const ImageCaptureGuide = ({
               size="lg"
               onClick={handleGallerySelect}
               disabled={isCapturing}
-              className="text-white border-white/30 hover:bg-white/10"
+              className="text-white border-white/30 hover:bg-white/10 touch-target px-3 sm:px-4"
             >
-              <ImageIcon className="w-5 h-5" />
+              <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
           
@@ -136,7 +136,7 @@ export const ImageCaptureGuide = ({
                 variant="ghost" 
                 size="lg"
                 onClick={onNext}
-                className="flex-1 text-white hover:bg-white/10"
+                className="flex-1 text-white hover:bg-white/10 touch-target text-sm sm:text-base"
               >
                 Next
               </Button>
@@ -145,9 +145,9 @@ export const ImageCaptureGuide = ({
                 variant="default" 
                 size="lg"
                 onClick={onNext}
-                className="flex-1 bg-primary hover:bg-primary/90"
+                className="flex-1 bg-primary hover:bg-primary/90 touch-target text-sm sm:text-base"
               >
-                <CheckCircle className="w-5 h-5 mr-2" />
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Done
               </Button>
             )}

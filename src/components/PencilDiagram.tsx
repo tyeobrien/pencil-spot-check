@@ -31,23 +31,23 @@ export const PencilDiagram = ({ selectedRegions, onRegionSelect, onNext }: Penci
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="min-h-screen bg-background mobile-container py-4">
       <div className="container mx-auto max-w-4xl">
         <Card className="bg-gradient-card border-border/50 shadow-elegant">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold text-foreground">
+          <CardHeader className="text-center p-4 sm:p-6">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-foreground mb-2">
               Select Damage Areas
             </CardTitle>
-            <p className="text-muted-foreground">
+            <p className="text-sm sm:text-base text-muted-foreground">
               Tap on the pencil regions where you notice damage or wear
             </p>
           </CardHeader>
           
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             {/* Pencil SVG Diagram */}
-            <div className="mb-8 flex justify-center">
-              <div className="relative">
-                <svg width="360" height="100" viewBox="0 0 360 100" className="drop-shadow-lg">
+            <div className="mb-6 sm:mb-8 flex justify-center">
+              <div className="relative w-full max-w-md">
+                <svg width="360" height="100" viewBox="0 0 360 100" className="mobile-svg drop-shadow-lg">
                   {/* Main pencil body */}
                   <rect x="50" y="45" width="260" height="10" fill="#F4C430" stroke="#D4A017" strokeWidth="1" rx="2"/>
                   
@@ -84,11 +84,13 @@ export const PencilDiagram = ({ selectedRegions, onRegionSelect, onNext }: Penci
                           ? "#FB9236"
                           : "transparent"
                       }
-                      strokeWidth="2"
-                      className="cursor-pointer transition-all duration-200"
-                      onMouseEnter={() => setHoveredRegion(region.id)}
-                      onMouseLeave={() => setHoveredRegion(null)}
-                      onClick={() => onRegionSelect(region.id)}
+                       strokeWidth="2"
+                       className="cursor-pointer transition-all duration-200 touch-target"
+                       onMouseEnter={() => setHoveredRegion(region.id)}
+                       onMouseLeave={() => setHoveredRegion(null)}
+                       onTouchStart={() => setHoveredRegion(region.id)}
+                       onTouchEnd={() => setHoveredRegion(null)}
+                       onClick={() => onRegionSelect(region.id)}
                     />
                   ))}
                 </svg>
@@ -129,11 +131,12 @@ export const PencilDiagram = ({ selectedRegions, onRegionSelect, onNext }: Penci
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button 
                 variant="outline" 
                 onClick={() => onRegionSelect('')}
                 disabled={selectedRegions.length === 0}
+                className="touch-target text-sm sm:text-base"
               >
                 Clear Selection
               </Button>
@@ -141,7 +144,7 @@ export const PencilDiagram = ({ selectedRegions, onRegionSelect, onNext }: Penci
                 variant="default" 
                 onClick={onNext}
                 disabled={selectedRegions.length === 0}
-                className="min-w-32"
+                className="touch-target text-sm sm:text-base min-w-32"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Continue
